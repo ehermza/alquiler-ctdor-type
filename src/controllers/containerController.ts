@@ -7,7 +7,7 @@ import {
     createContainerServ,
     updateContainerServ,
     deleteContainerServ,
-} from "../services/productService"
+} from "../services/containerService";
 
 export async function getContainersCtrl(req: Request, res: Response) {
     try {
@@ -72,3 +72,7 @@ export async function deleteContainerCtrl(req:Request, res:Response) {
         res.status(510).json({status:510, messsage: 'Failed to try delete one exists container'});
     }
 }
+
+/**
+ * Code tsc written for author: ehermza Date: 09.agost/2021
+ */

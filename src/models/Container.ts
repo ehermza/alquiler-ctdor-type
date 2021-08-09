@@ -2,7 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 import { uuid } from 'uuidv4';
 
 export interface IContainer extends Document {
-    id_cont: string;
+    id_container: string;
     description: string;
     price_tocharge: Number;
     rented_by: string;
@@ -13,7 +13,7 @@ export interface IContainer extends Document {
 
 const ContainerSchema = new Schema(
     {
-        id_cont: { type: String, required: true },
+        id_container: { type: String, required: true },
         description: { type: String, required: true },
         price_tocharge: Number,
         rented_by: String,
@@ -22,5 +22,5 @@ const ContainerSchema = new Schema(
     }
 );
 
-export default model<IContainer>('Container', ContainerSchema);
+export default model<IContainer>('container', ContainerSchema);
 

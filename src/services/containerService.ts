@@ -3,7 +3,7 @@ import { ObjectID } from 'mongodb'
 
 export async function getContainersServ() {
     try {
-        return Container.find();
+        return await Container.find();
     }
      catch (error) {
         throw Error(error);
@@ -41,7 +41,7 @@ export async function updateContainerServ(id:ObjectID, objprod:IContainer) {
 
 export async function deleteContainerServ(id:ObjectID) {
     try {
-        return Container.findByIdAndDelete(id);
+        return await Container.findByIdAndDelete(id);
     } catch (error) {
         throw Error(error);
         
