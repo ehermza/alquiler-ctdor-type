@@ -37,7 +37,6 @@ export async function updateContainerServ(id:ObjectID, objprod:IContainer) {
         throw Error(error);
         
     }
-
 }
 
 export async function deleteContainerServ(id:ObjectID) {
