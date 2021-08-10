@@ -14,7 +14,7 @@ export interface IContainer extends Document {
 const ContainerSchema = new Schema(
     {
         id_container: { type: String, required: true },
-        description: { type: String, required: true },
+        description: { type: String, default: "" },
         price_tocharge: Number,
         rented_by: String,
         rented_by_id: {type:String, default: uuid()},

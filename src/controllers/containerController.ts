@@ -36,8 +36,10 @@ export async function getContainerOneCtrl(req: Request, res: Response) {
 export async function createContainerCtrl(req: Request, res: Response) {
     try {
         const { id, price, client, active } = req.body;
+        console.log(req.body);
+        
         const container: IContainer = new Container({
-            id_cont: id,
+            id_container: id,
             price_tocharge: price,
             rented_by: client,
             active: active

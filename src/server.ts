@@ -15,7 +15,7 @@ class Server {
 
   config() {
     //connection mongodb atlas
-    mongoose.connect('mongodb://localhost/alq-container', {
+    mongoose.connect('mongodb://localhost/alq-containers', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
@@ -35,7 +35,7 @@ class Server {
 
   routes() {
     this.app.use(routes);
-    this.app.use("/api/products", productsRoutes);
+    this.app.use("/api/containers", productsRoutes);
   }
 
   start() {
