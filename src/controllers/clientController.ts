@@ -12,6 +12,7 @@ import {
 export async function getClientsCtrl(req: Request, res: Response) {
     try {
         const clients = await getClientsService();
+        console.log(clients);
         res.json(clients);
 
     } catch (error) {
@@ -23,6 +24,7 @@ export async function getClientOneCtrl(req: Request, res: Response) {
     try {
         const { id } = req.params;
         const client = await getClientOneService(new ObjectID(id));
+        res.json(client);
     } catch (error) {
         res.status(510).json({ status: 510, message: 'Error to try get one client' });
     }

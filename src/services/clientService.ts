@@ -3,7 +3,7 @@ import { ObjectID } from "mongodb";
 
 export async function getClientsService() {
     try {
-        await Client.find();
+       return await Client.find();
     } catch (error) {
         throw Error(error);
     }
