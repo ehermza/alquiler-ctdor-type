@@ -10,7 +10,7 @@ export async function getClientsService() {
 
 };
 
-async function getClientOneService(id: ObjectID) {
+export async function getClientOneService(id: ObjectID) {
     try {
         return await Client.findById(id);
     } catch (error) {
@@ -19,7 +19,7 @@ async function getClientOneService(id: ObjectID) {
     }
 };
 
-async function createClientService(objclient: IClient) {
+export async function createClientService(objclient: IClient) {
     try {
         return await objclient.save();
     } catch (error) {
@@ -28,7 +28,7 @@ async function createClientService(objclient: IClient) {
     }
 }
 
-async function updateClientService(id:ObjectID, objclient:IClient) {
+export async function updateClientService(id:ObjectID, objclient:IClient) {
     try {
         return await Client.findByIdAndUpdate(id, objclient);
     } catch (error) {
