@@ -1,8 +1,10 @@
 import express from "express";
 import morgan from "morgan";
-import routes from "./routes/index";
-import productsRoutes from "./routes/containerRoute";
 import mongoose from "mongoose";
+
+import routes from "./routes/index";
+import containerRoutes from "./routes/containerRoute";
+import clientRoutes from "./routes/clientRoute";
 // import cors from "cors";
 
 class Server {
@@ -35,7 +37,8 @@ class Server {
 
   routes() {
     this.app.use(routes);
-    this.app.use("/api/containers", productsRoutes);
+    this.app.use("/api/containers", containerRoutes);
+    this.app.use("/api/clients", clientRoutes);
   }
 
   start() {
