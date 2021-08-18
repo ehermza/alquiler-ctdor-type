@@ -1,11 +1,11 @@
 import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import cors from "cors";
 
 import routes from "./routes/index";
 import containerRoutes from "./routes/containerRoute";
 import clientRoutes from "./routes/clientRoute";
-// import cors from "cors";
 
 class Server {
   public app: express.Application;
@@ -32,7 +32,7 @@ class Server {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(morgan("dev"));
-    // this.app.use(cors());
+    this.app.use(cors());
   }
 
   routes() {
