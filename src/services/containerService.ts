@@ -20,6 +20,16 @@ export async function getContainerOneServ(id: ObjectID) {
     }
 }
 
+export async function getContByNumberService(idctner: Number) {
+
+    try {
+        const filter = {'id_container': idctner.toString()};
+        return await Container.findOne(filter);
+    } catch (error) {
+        throw Error(error);
+    }
+}
+
 export async function createContainerServ(objprod: IContainer) {
     try {
         return await objprod.save();

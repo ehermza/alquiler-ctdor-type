@@ -1,11 +1,13 @@
 import { Router } from 'express';
 
+
 import {
     getContainersCtrl,
     getContainerOneCtrl,
     createContainerCtrl,
     updateContainerCtrl,
-    deleteContainerCtrl
+    deleteContainerCtrl,
+    getContbyNumberCtrl
 } from "../controllers/containerController";
 
 
@@ -20,6 +22,7 @@ class Container
     routes() {
         this.router.get('/', getContainersCtrl);
         this.router.get('/:id', getContainerOneCtrl);
+        this.router.get('/number/:idctner', getContbyNumberCtrl);
         this.router.post('/', createContainerCtrl);
         this.router.put('/:id', updateContainerCtrl);
         this.router.delete('/:id', deleteContainerCtrl);

@@ -13,7 +13,7 @@ export interface IContainer extends Document {
 
 const ContainerSchema = new Schema(
     {
-        id_container: { type: String, required: true },
+        id_container: { type: Number, required: true },
         description: { type: String, default: "" },
         price_tocharge: Number,
         rented_by: String,

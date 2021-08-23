@@ -6,7 +6,7 @@ import {
     getClientsService,
     getClientOneService,
     createClientService,
-    updateClientService
+    updateClientService,
 } from "../services/clientService";
 
 export async function getClientsCtrl(req: Request, res: Response) {
@@ -30,6 +30,18 @@ export async function getClientOneCtrl(req: Request, res: Response) {
     }
 }
 
+/* 
+    export async function getClientByIdContCtrl(req:Request, res:Response) {
+    try {
+        const {idctner} = req.params;
+        const client = await getContByNumberService(parseInt(idctner));
+        console.log(`RE: getClientByIdContCtrl: ${client}`);
+
+    } catch (error) {
+        
+    }
+}
+ */
 export async function createClientCtrl(req: Request, res: Response) {
     try {
         const { name, telephone, cuit, business } = req.body;
