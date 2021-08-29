@@ -18,8 +18,8 @@ class Client {
         this.router.get('/', getClientsCtrl);
         this.router.get('/:id', getClientOneCtrl);
         this.router.post('/', createClientCtrl);
-        // this.router.put('/:id', updateClientCtrl);
-        this.router.post('/update/:id', updateClientCtrl);
+        this.router.put('/:id', updateClientCtrl);
+        // this.router.post('/update/:id', updateClientCtrl);
 
     }
 };

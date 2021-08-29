@@ -30,8 +30,10 @@ export async function createClientService(objclient: IClient) {
 
 export async function updateClientService(id:ObjectID, objclient:IClient) {
     try {
+        // console.log('(clientService) findByIdAndUpdate()', objclient);
         return await Client.findByIdAndUpdate(id, objclient);
     } catch (error) {
+        console.log('(ERROR) findByIdAndUpdate()', objclient);
         throw Error(error);
     }
 };

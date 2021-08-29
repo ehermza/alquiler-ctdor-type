@@ -64,6 +64,7 @@ export async function updateClientCtrl(req: Request, res: Response) {
     try {
         const { id } = req.params;
         const objclient =   await updateClientService(new ObjectID(id), req.body);
+        console.log('(clientController) updateClientCtrl(req,res) = ', req.params);
         res.json(objclient);
     } catch (error) {
         res.status(501).json({status:501, message: 'Error to try update a saved client'});
