@@ -5,7 +5,7 @@ import {
     getPagosCtrl
  } from "../controllers/pagoController";
 
-class pagoRoute 
+class Pago
 {
     router:Router;
 
@@ -19,3 +19,6 @@ class pagoRoute
         this.router.post('/', createPagoCtrl);
     }
 }
+const pago = new Pago();
+
+export default pago.router;
