@@ -18,9 +18,10 @@ export async function getPagosCtrl(req: Request, res: Response) {
 export async function createPagoCtrl(req: Request, res: Response)
  {
     try {
-        const { client, value, id_container, month_paid, paid_at,recibo } = req.body;
-
-        const pago: IPago = new Pago({
+        const pago:IPago = new Pago(req.body);
+        
+        // const { client, value, id_container, month_paid, paid_at,recibo } = req.body;
+/*         const pago: IPago = new Pago({
             client: client,
             value: value,
             id_container,
@@ -28,7 +29,9 @@ export async function createPagoCtrl(req: Request, res: Response)
             paid_at,
             recibo: recibo
         });
-        await createPagoService(pago);
+        */        
+       await createPagoService(pago);
+        console.log(req.body);
 
     } catch (error) {
         res.status(510).json({ status: 510, message: 'Error to try create a new pay' });
