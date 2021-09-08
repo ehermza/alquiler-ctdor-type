@@ -2,8 +2,11 @@ import { Router } from "express";
 
 import { 
     createPagoCtrl,
-    getPagosCtrl
+    getPagosByClientCtrl,
+    getPagosCtrl,
  } from "../controllers/pagoController";
+
+ import {createPaymentCtrl} from "../controllers/rentalController";
 
 class Pago
 {
@@ -16,7 +19,9 @@ class Pago
 
     routes() {
         this.router.get('/', getPagosCtrl);
-        this.router.post('/', createPagoCtrl);
+        this.router.get('/:idclient&:nctner', getPagosByClientCtrl);
+        // this.router.post('/', createPagoCtrl);
+        this.router.post('/', createPaymentCtrl);
     }
 }
 const pago = new Pago();

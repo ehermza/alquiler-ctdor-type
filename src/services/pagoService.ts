@@ -10,6 +10,21 @@ export async function getPagosService()
     }
 }
 
+export async function getPagosByClientService(idClient:string, nCtner:Number) 
+{
+    try {
+        // return await Pago.find();
+        const filter: any = {
+            'client': idClient,
+            'id_container': nCtner
+        };
+        return await Pago.find(filter);
+    
+    } catch (error) {
+        throw Error(error);
+    }
+}
+
 export async function createPagoService(objpago:IPago) 
 {
     try {

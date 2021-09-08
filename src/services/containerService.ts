@@ -3,7 +3,9 @@ import { ObjectID } from 'mongodb'
 
 export async function getContainersServ() {
     try {
-        return await Container.find();
+        // return await Container.find({ rented_by: { $ne: '' }}).sort({id_container:-1});
+        // return await Container.find();
+        return await Container.find().sort({id_container:-1});
     }
      catch (error) {
         throw Error(error);
@@ -59,5 +61,5 @@ export async function deleteContainerServ(id:ObjectID) {
 }
 
 /**
- * Code written for ehermza Date: 08.agost/2021
+ * Code written by ehermza Date: August 08th, 2021.
  */
