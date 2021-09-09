@@ -18,10 +18,13 @@ class Pago
     }
 
     routes() {
+/**
+ *  Functions Implemented in Rental model:
+        this.router.post('/', createPaymentCtrl);
+ **/        
         this.router.get('/', getPagosCtrl);
         this.router.get('/:idclient&:nctner', getPagosByClientCtrl);
         // this.router.post('/', createPagoCtrl);
-        this.router.post('/', createPaymentCtrl);
     }
 }
 const pago = new Pago();

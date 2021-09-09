@@ -1,6 +1,15 @@
 
 import Rental, { IRental, RgtPago } from '../models/Rental';
 
+export async function getPagosService() {
+    
+}
+export async function createPagoService(objpago:any) {
+/**
+ * export async function insertPaymentService(objRent:IRental, body:any)
+
+ */
+}
 export async function getPagosByClientService(idClient: string, nCtner: Number) {
     try {
         // return await Pago.find();
@@ -23,25 +32,56 @@ export async function getPagosByClientService(idClient: string, nCtner: Number) 
 export async function getRentalObjectServ(idClient: string, idCtner: string)
  {
         try {
-            // "id_container": idCtner
-            // "id_client": idClient,
-            const filter:any = {}
+            const filter:any = {
+                "id_client": idClient,
+                "id_container": idCtner
+            }
             console.log( '(getRentalObjectServ) filter: ', filter);
-            const ver= await Rental.findOne(filter).exec();
-            console.log(ver);
-            return ver;
-            // return await Rental.findOne(filter);
+            return await Rental.findOne(filter).exec();
                 
         } catch (error) {
-            
+            throw Error(error);            
         }
 }
 
-export async function insertPaymentService(objRent:IRental, pago:RgtPago)
+export async function createAlquilerService(idClient:string, idCtner:string, fecha:number) 
+{
+    try {
+        // const alquiler:IRental       
+        const alquiler:IRental = new Rental(
+            {
+            id_client: idClient,
+            id_container: idCtner,
+            active: true,
+            date_init: fecha,
+            deuda_total: 0,
+            deuda_register: [],
+            pagos_total: 0,
+            pagos_register: []
+            }
+        );
+        const rental:IRental = alquiler;
+        console.log(rental);
+        return await rental.save();
+        
+    } catch (error) {
+        throw Error(error);
+        
+    }
+}
+
+// export async function insertPaymentService(objRent:IRental, pago:RgtPago)
+export async function insertPaymentService(objRent:IRental, body:any)
  {
     try {
-        if (!objRent) return -1;
-
+        const { container, value, recibo_n } = body;
+        
+        const pago:RgtPago = {
+            value: parseFloat(value),
+            period: 'periodo',
+            paid_at: new Date(),
+            recibo_n: recibo_n
+        }
         // await Rental.findByIdAndUpdate(objRent._id);
         objRent.pagos_register.push(pago);
         await objRent.save();

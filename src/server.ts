@@ -6,7 +6,8 @@ import cors from "cors";
 import routes from "./routes/index";
 import containerRoutes from "./routes/containerRoute";
 import clientRoutes from "./routes/clientRoute";
-import pagoRoutes from "./routes/pagoRoute";
+// import pagoRoutes from "./routes/pagoRoute";
+import rentalRoutes from "./routes/rentalRoute";
 
 class Server {
   public app: express.Application;
@@ -40,7 +41,8 @@ class Server {
     this.app.use(routes);
     this.app.use("/api/containers", containerRoutes);
     this.app.use("/api/clients", clientRoutes);
-    this.app.use("/api/pagos", pagoRoutes);
+    // this.app.use("/api/pagos", pagoRoutes);
+    this.app.use("/api/rental", rentalRoutes);
   }
 
   start() {

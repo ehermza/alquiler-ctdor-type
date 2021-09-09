@@ -24,7 +24,7 @@ export interface RgtPago {
 
     active: Boolean;
     date_init: Date;
-    date_final: Date;
+    date_final?: Date;
 
     deuda_total: number;
     deuda_register: Array<RgtDeuda>;
@@ -32,14 +32,36 @@ export interface RgtPago {
     pagos_total: number;
     pagos_register: Array<RgtPago>;
  }
+ /*
+ const rentalSchema = new Schema(
+    {
+        id_client: {type:String, required:true},
+        id_container: {type:String, required:true},
+
+        active: {type:Boolean},
+        date_init: {type:Date, required:true},
+        date_final: {type:Date, required:false},
+
+        deuda_total: Number,
+        deuda_register: [],
+
+        pagos_total: Number,
+        pagos_register: []
+   }
+)
+*/
 
 const rentalSchema = new Schema(
     {
-        id_client: String,
-        id_container: String,
+        id_client: {type:String, required:true},
+        id_container: {type:String, required:true},
 
         active: Boolean,
-        date_init: Date,
+        date_init: {
+            type:Date, 
+            default: Date.now,
+            required: true
+        },
         date_final: Date,
 
         deuda_total: Number,
