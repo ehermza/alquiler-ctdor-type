@@ -1,14 +1,31 @@
 
 import Rental, { IRental, RgtPago } from '../models/Rental';
 
+
 export async function getPagosService() {
+    try {
+        
+    } catch (error) {
+        
+    }
     
 }
-export async function createPagoService(objpago:any) {
-/**
- * export async function insertPaymentService(objRent:IRental, body:any)
+export async function getPaymentByCtnerServ(idCtner:string) {
+    try {
+        const filter: any = {
+            'id_container': idCtner,
+            'active': true
+        }
+        console.log(filter);
+        const alquiler:IRental|null = await Rental.findOne(filter);
+        if(!alquiler) return null;
 
- */
+        return await alquiler.pagos_register;
+
+    } catch (error) {
+        throw Error(error);
+        
+    }
 }
 export async function getPagosByClientService(idClient: string, nCtner: Number) {
     try {
@@ -91,13 +108,7 @@ export async function insertPaymentService(objRent:IRental, body:any)
         await objRent.update({
             pagos_total: totalAct
         });
-
         return objRent;
-        // this.pagos_register.push(pago);
-        // this.pagos_total+= importe;
-
-        // // return true;
-        // return (this.deuda_total - this.pagos_total);
 
     } catch (error) {
 

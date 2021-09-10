@@ -4,7 +4,7 @@ import { Router } from "express";
 import {
     createPaymentCtrl,
     createAlquilerCtrl,
-    print,
+    getPaymentByCtnerCtrl
 } from "../controllers/rentalController";
 
 class Rental {
@@ -19,7 +19,8 @@ class Rental {
     routes() {
         this.router.post('/', createAlquilerCtrl);
         // this.router.post('/', print);
-        this.router.post('/pago/', createPaymentCtrl);
+        this.router.post('/pagos/', createPaymentCtrl);
+        this.router.get('/pagos/:id', getPaymentByCtnerCtrl);
     }
 
 }
