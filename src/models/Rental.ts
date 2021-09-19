@@ -1,5 +1,6 @@
 
 import { Schema, Document, model } from "mongoose"
+import { ObjectID } from 'mongodb'
 
 export interface RgtDeuda {
     value: number;
@@ -7,6 +8,7 @@ export interface RgtDeuda {
 }
 
 export interface RgtPago {
+    // _id: ObjectID;
     value: number;
     period: String;
     paid_at: Date;

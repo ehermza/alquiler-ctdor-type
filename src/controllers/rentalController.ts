@@ -5,15 +5,18 @@ import {
     getRentalObjectServ,
     insertPaymentService,
     createAlquilerService,
-    getPaymentByCtnerServ
+    getPaymentByCtnerServ,
+    getSaldoByCtnerService,
+    deletePaymentByCtnerServ
 } from "../services/rentalService";
 
 import { getContainerOneServ } from "../services/containerService";
 import { RgtPago } from "../models/Rental";
+import { Number } from "mongoose";
 
 export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
     /**
-     *  First find the Rental active by: req.body.id_container
+     *  First find the Rental active from: (req.params).id_container
      *  .. then return pagos_register
      */
     try {
@@ -30,6 +33,31 @@ export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
     }
 }
 
+export async function deletePaymentCtrl(req: Request, res: Response) {
+    try {
+        // const { idpayment, idctner } = req.params;
+        const { recibo, idctner } = req.body;
+        const result = await deletePaymentByCtnerServ(recibo, idctner);
+        if (!result) {
+            res.status(536).json({ message: 'Fail to try delete payment.' });
+        }
+        res.json(result);
+
+    } catch (error) {
+
+    }
+}
+
+export async function getSaldoByCtnerCtrl(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+        const result: number = await getSaldoByCtnerService(id);
+        res.json({ saldo: result });
+
+    } catch (error) {
+        res.status(516).json({ message: 'Error to try get (saldo actual) of client.' })
+    }
+}
 export async function getPagosCtrl(req: Request, res: Response) {
     /*   
           try {

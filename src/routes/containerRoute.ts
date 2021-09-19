@@ -7,7 +7,8 @@ import {
     createContainerCtrl,
     updateContainerCtrl,
     deleteContainerCtrl,
-    getContbyNumberCtrl
+    getContbyNumberCtrl,
+    insertContainersController
 } from "../controllers/containerController";
 
 
@@ -26,6 +27,7 @@ class Container
         this.router.post('/', createContainerCtrl);
         this.router.put('/:id', updateContainerCtrl);
         this.router.delete('/:id', deleteContainerCtrl);
+        this.router.post('/create/:number', insertContainersController);
     }
 }
 const container = new Container();

@@ -68,6 +68,24 @@ export async function createContainerCtrl(req: Request, res: Response) {
         res.status(500).json({ status: 500, message: 'Failed to create the container!' });
     }
 }
+export async function insertContainersController(req:Request, res:Response)
+ {
+    // const TOTALCONT: number= 33;
+    const {number} = req.params;
+    try {
+        const container: IContainer = new Container({
+            id_container: parseInt(number),
+            price_tocharge: 0,
+            rented_by: '',
+            active: false
+        });
+        await createContainerServ(container);
+        res.json(container);
+    } 
+    catch (error) {
+        
+    }
+}
 
 export async function updateContainerCtrl(req: Request, res: Response) {
     try {

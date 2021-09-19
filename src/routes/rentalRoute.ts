@@ -4,7 +4,9 @@ import { Router } from "express";
 import {
     createPaymentCtrl,
     createAlquilerCtrl,
-    getPaymentByCtnerCtrl
+    getPaymentByCtnerCtrl,
+    getSaldoByCtnerCtrl, 
+    deletePaymentCtrl
 } from "../controllers/rentalController";
 
 class Rental {
@@ -19,8 +21,11 @@ class Rental {
     routes() {
         this.router.post('/', createAlquilerCtrl);
         // this.router.post('/', print);
-        this.router.post('/pagos/', createPaymentCtrl);
-        this.router.get('/pagos/:id', getPaymentByCtnerCtrl);
+        this.router.post('/pagos/', createPaymentCtrl);      // insert new payment to database
+        this.router.get('/pagos/:id', getPaymentByCtnerCtrl);   // get all payments of client by container active,
+        this.router.get('/saldo/:id', getSaldoByCtnerCtrl);     // get difer. (pagos_total - deuda_total)
+        // this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
+        this.router.delete('/pagos/', deletePaymentCtrl);
     }
 
 }

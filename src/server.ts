@@ -19,7 +19,7 @@ class Server {
 
   config() {
     //connection mongodb atlas
-    mongoose.connect('mongodb://localhost/alq-containers', {
+    mongoose.connect('mongodb://localhost/containers', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
