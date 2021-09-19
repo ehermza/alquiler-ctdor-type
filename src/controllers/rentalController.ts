@@ -36,7 +36,8 @@ export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
 export async function deletePaymentCtrl(req: Request, res: Response) {
     try {
         // const { idpayment, idctner } = req.params;
-        const { recibo, idctner } = req.body;
+        const { recibo, idctner } = req.params;
+        console.log(req.body)
         const result = await deletePaymentByCtnerServ(recibo, idctner);
         if (!result) {
             res.status(536).json({ message: 'Fail to try delete payment.' });

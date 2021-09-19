@@ -25,7 +25,7 @@ class Rental {
         this.router.get('/pagos/:id', getPaymentByCtnerCtrl);   // get all payments of client by container active,
         this.router.get('/saldo/:id', getSaldoByCtnerCtrl);     // get difer. (pagos_total - deuda_total)
         // this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
-        this.router.delete('/pagos/', deletePaymentCtrl);
+        this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
     }
 
 }
