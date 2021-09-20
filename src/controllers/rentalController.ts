@@ -7,11 +7,12 @@ import {
     createAlquilerService,
     getPaymentByCtnerServ,
     getSaldoByCtnerService,
-    deletePaymentByCtnerServ
+    deletePaymentByCtnerServ, 
+    getRentalByCtnerService
 } from "../services/rentalService";
 
 import { getContainerOneServ } from "../services/containerService";
-import { RgtPago } from "../models/Rental";
+import { RgtPago, IRental } from "../models/Rental";
 import { Number } from "mongoose";
 
 export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
@@ -30,6 +31,21 @@ export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
     } catch (error) {
         res.status(506).json({ status: 506, message: 'Error to try get pagos from database' });
 
+    }
+}
+
+export async function getRentalByCtnerController(req:Request, res:Response) 
+{
+    try {
+        const {idctner} = req.params;
+        const rental: any = await getRentalByCtnerService(idctner);
+        if(!rental) {
+            res.status(569).json({status:569, message:'Rental object requested is not exists.'})
+        }
+        res.json(rental);
+
+    } catch (error) {
+        res.status(579).json({status:579, message:'Error to try get Alquiler object.'});
     }
 }
 

@@ -6,7 +6,8 @@ import {
     createAlquilerCtrl,
     getPaymentByCtnerCtrl,
     getSaldoByCtnerCtrl, 
-    deletePaymentCtrl
+    deletePaymentCtrl, 
+    getRentalByCtnerController
 } from "../controllers/rentalController";
 
 class Rental {
@@ -20,6 +21,7 @@ class Rental {
     }
     routes() {
         this.router.post('/', createAlquilerCtrl);
+        this.router.get('/container/:idctner', getRentalByCtnerController);
         // this.router.post('/', print);
         this.router.post('/pagos/', createPaymentCtrl);      // insert new payment to database
         this.router.get('/pagos/:id', getPaymentByCtnerCtrl);   // get all payments of client by container active,

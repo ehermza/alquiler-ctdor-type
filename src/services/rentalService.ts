@@ -2,6 +2,22 @@
 import Rental, { IRental, RgtPago } from '../models/Rental';
 import { ObjectID } from "mongodb";
 
+export async function getRentalByCtnerService(idCtner: string)
+{
+    /**
+     * Date: 19 Sept, 2021 
+     * Get the object Rental from one Container actually active  */
+    try {
+        const filter: any = {
+            'id_container': idCtner,
+            'active': true
+        }
+        return await Rental.findOne(filter);
+
+    } catch (error) {
+        throw Error(error);
+    }
+}
 export async function deletePaymentService(idPayment: string) {
     try {
 
@@ -38,9 +54,7 @@ export async function getPagosService() {
 
 }
 // export async function deletePaymentByCtnerServ(idPayment: string, idCtner: string)
-export async function deletePaymentByCtnerServ(recibo: string, idCtner: string)
-
- {
+export async function deletePaymentByCtnerServ(recibo: string, idCtner: string) {
     try {
         const filter: any = {
             'id_container': idCtner,
@@ -51,17 +65,17 @@ export async function deletePaymentByCtnerServ(recibo: string, idCtner: string)
         if (!objRent) return null;        /** don't can find an active rental */
 
         // console.log(recibo);
-         console.log (objRent.pagos_register);
+        console.log(objRent.pagos_register);
         /**
          * Delete the Payment Register on Rental object (by Recibo number) */
         const register: Array<RgtPago> =
-            objRent.pagos_register.filter((item) => 
-                 (item.recibo_n!= recibo)
+            objRent.pagos_register.filter((item) =>
+                (item.recibo_n != recibo)
             );
         objRent.pagos_register = register;
 
-        var vartotal:number = 0;
-         register.forEach((item) => {
+        var vartotal: number = 0;
+        register.forEach((item) => {
             vartotal += item.value;
         });
         objRent.pagos_total = vartotal;
