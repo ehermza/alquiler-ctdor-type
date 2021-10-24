@@ -88,6 +88,9 @@ export async function insertContainersController(req:Request, res:Response)
 }
 
 export async function updateContainerCtrl(req: Request, res: Response) {
+    /**
+     *  PUT method, containers/:id
+     */
     try {
         const { id } = req.params;
         const container = await updateContainerServ(new ObjectID(id), req.body);
