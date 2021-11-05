@@ -7,7 +7,9 @@ import {
     getPaymentByCtnerCtrl,
     getSaldoByCtnerCtrl, 
     deletePaymentCtrl, 
-    getRentalByCtnerController
+    getRentalByCtnerController,
+    getMonthNumberController, 
+    insertDebtController
 } from "../controllers/rentalController";
 
 class Rental {
@@ -28,6 +30,10 @@ class Rental {
         this.router.get('/saldo/:id', getSaldoByCtnerCtrl);     // get difer. (pagos_total - deuda_total)
         // this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
         this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
+        
+        this.router.get('/fecha/:idctner', getMonthNumberController);
+        this.router.get('/insertdebt/:idctner', insertDebtController);      
+            //  November 04th, 2021!
     }
 
 }

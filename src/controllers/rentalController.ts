@@ -7,8 +7,10 @@ import {
     createAlquilerService,
     getPaymentByCtnerServ,
     getSaldoByCtnerService,
-    deletePaymentByCtnerServ, 
-    getRentalByCtnerService
+    deletePaymentByCtnerServ,
+    getRentalByCtnerService,
+    getMonthNumberService,
+    insertDebtService
 } from "../services/rentalService";
 
 import { getContainerOneServ } from "../services/containerService";
@@ -34,18 +36,17 @@ export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
     }
 }
 
-export async function getRentalByCtnerController(req:Request, res:Response) 
-{
+export async function getRentalByCtnerController(req: Request, res: Response) {
     try {
-        const {idctner} = req.params;
+        const { idctner } = req.params;
         const rental: any = await getRentalByCtnerService(idctner);
-        if(!rental) {
-            res.status(569).json({status:569, message:'Rental object requested is not exists.'})
+        if (!rental) {
+            res.status(569).json({ status: 569, message: 'Rental object requested is not exists.' })
         }
         res.json(rental);
 
     } catch (error) {
-        res.status(579).json({status:579, message:'Error to try get Alquiler object.'});
+        res.status(579).json({ status: 579, message: 'Error to try get Alquiler object.' });
     }
 }
 
@@ -75,6 +76,7 @@ export async function getSaldoByCtnerCtrl(req: Request, res: Response) {
         res.status(516).json({ message: 'Error to try get (saldo actual) of client.' })
     }
 }
+
 export async function getPagosCtrl(req: Request, res: Response) {
     /*   
           try {
@@ -125,5 +127,33 @@ export async function createAlquilerCtrl(req: Request, res: Response) {
 
     } catch (error) {
         res.status(730).json({ status: 730, message: 'Error to try create Alquiler object!' });
+    }
+}
+
+export async function getMonthNumberController(req: Request, res: Response) {
+    // this shit works! jojo..
+    try {
+        const { idctner } = req.params;
+        const ra = await getMonthNumberService(idctner);
+        res.json(ra);
+    } catch (error) {
+
+    }
+}
+
+export async function insertDebtController(req: Request, res: Response) {
+    try {
+        const { idctner } = req.params;
+        const price = await insertDebtService(idctner);
+        if (price == -1) {
+            res.status(779).json({ status: 779, message: "Error to try get Container Price." });
+        }
+        const rpta= {
+            "price_tocharge": price
+        }
+        res.json(rpta);
+
+    } catch (error) {
+
     }
 }

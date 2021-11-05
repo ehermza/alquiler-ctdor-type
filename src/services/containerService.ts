@@ -22,6 +22,17 @@ export async function getContainerOneServ(id: ObjectID) {
     }
 }
 
+export async function getPriceContainerService(id:ObjectID): Promise<Number> {
+    try {
+        const cont: IContainer| null =  await Container.findById(id);
+        if (!cont) 
+            return -1;
+        return cont.price_tocharge;
+
+    } catch (error) {
+        throw Error(error);
+    }
+}
 export async function getContByNumberService(idctner: Number) {
 
     try {

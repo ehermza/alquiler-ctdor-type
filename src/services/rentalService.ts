@@ -1,9 +1,28 @@
 
-import Rental, { IRental, RgtPago } from '../models/Rental';
+import Rental, { IRental, RgtPago, RgtDeuda } from '../models/Rental';
+import { getPriceContainerService } from './containerService';
+
 import { ObjectID } from "mongodb";
 
-export async function getRentalByCtnerService(idCtner: string)
-{
+const str: String = "ENE,FEB,MAR,ABR,MAY,JUN,JUL,AGO,SEP,OCT,NOV,DIC";
+
+export async function getMonthNumberService(idCtner: string) {
+    try {
+        const arrayt = str.split(',');
+        const rental: IRental | null = await getRentalByCtnerService(idCtner);
+        if (!rental) {
+            return -1;
+        }
+        const fecha: Date = rental.date_init;
+        return arrayt[fecha.getMonth()];
+
+    } catch (error) {
+        throw Error(error);
+
+    }
+}
+
+export async function getRentalByCtnerService(idCtner: string) {
     /**
      * Date: 19 Sept, 2021 
      * Get the object Rental from one Container actually active  */
@@ -16,13 +35,6 @@ export async function getRentalByCtnerService(idCtner: string)
 
     } catch (error) {
         throw Error(error);
-    }
-}
-export async function deletePaymentService(idPayment: string) {
-    try {
-
-    } catch (error) {
-
     }
 }
 
@@ -123,7 +135,6 @@ export async function getPagosByClientService(idClient: string, nCtner: Number) 
         throw Error(error);
     }
 }
-
 // insertPayment(importe: number, fecha: Date, per: String, recibo?:String): number
 export async function getRentalObjectServ(idClient: string, idCtner: string) {
     try {
@@ -138,7 +149,6 @@ export async function getRentalObjectServ(idClient: string, idCtner: string) {
         throw Error(error);
     }
 }
-
 export async function createAlquilerService(idClient: string, idCtner: string, fecha: number) {
     try {
         // const alquiler:IRental       
@@ -192,3 +202,25 @@ export async function insertPaymentService(objRent: IRental, body: any) {
 
 }
 
+export async function insertDebtService(idCtner: string): Promise<Number> {
+    try {
+        const keyCont = {
+            "id_container": idCtner,
+            "active": true
+        }
+        const res = await Rental.findOne(keyCont);
+        if (!res) {
+            /** Dont exists rental with keyContainer: idCtner  */
+            return -1;
+        }
+        const price = getPriceContainerService(new ObjectID(idCtner));
+        if(!price) {
+            return -1;
+        }
+        return price;
+
+    } catch (error) {
+        return -1;
+
+    }
+}
