@@ -202,22 +202,30 @@ export async function insertPaymentService(objRent: IRental, body: any) {
 
 }
 
-export async function insertDebtService(idCtner: string): Promise<Number> {
+export async function insertDebtService(objRent: IRental, price: number): Promise<IRental|-1> {
     try {
-        const keyCont = {
-            "id_container": idCtner,
-            "active": true
+        // const keyCont = {
+        //     "id_container": idCtner,
+        //     "active": true
+        // }
+        // const res = await Rental.findOne(keyCont);
+        // if (!res) {
+        //     /** Dont exists rental with keyContainer: idCtner  */
+        //     return -1;
+        // }
+        const debt: RgtDeuda = {
+            value: price,
+            period: 'PER.DEBT'
         }
-        const res = await Rental.findOne(keyCont);
-        if (!res) {
-            /** Dont exists rental with keyContainer: idCtner  */
-            return -1;
-        }
-        const price = getPriceContainerService(new ObjectID(idCtner));
-        if(!price) {
-            return -1;
-        }
-        return price;
+        objRent.deuda_register.push(debt);
+        await objRent.save();
+
+        const total: number = objRent.deuda_total + price;
+        await objRent.update({
+            deuda_total: total
+        });
+
+        return objRent;
 
     } catch (error) {
         return -1;

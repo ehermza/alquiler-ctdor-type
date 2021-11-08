@@ -16,6 +16,7 @@ import {
 import { getContainerOneServ } from "../services/containerService";
 import { RgtPago, IRental } from "../models/Rental";
 import { Number } from "mongoose";
+import { IContainer } from "../models/Container";
 
 export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
     /**
@@ -141,6 +142,36 @@ export async function getMonthNumberController(req: Request, res: Response) {
     }
 }
 
+export async function createDebtController(req: Request, res: Response) {
+    try {
+        // const { container, value, recibo_n } = req.body;   
+        const { idctner } = req.params;
+        const objCtner: IContainer | null =
+            await getContainerOneServ(new ObjectID(idctner));
+            
+        if (!objCtner) {
+            res.status(714).json({ message: 'Container object not defined!' });
+            return;
+        }
+        const idclient: string = objCtner.rented_by_id;
+        const price: number = objCtner.price_tocharge;
+
+        const objRent: any = await getRentalObjectServ(idclient, idctner);
+        if (!objRent) {
+            res.status(710).json({ message: 'Rental object is null or undefined.' })
+            return;
+        }
+        const alquiler = await insertDebtService(objRent, price);
+        res.json(alquiler);
+
+    } catch (error) {
+        res.status(707).json({ message: 'Error to try GET Rent object.' })
+    }
+
+}
+
+/**
+
 export async function insertDebtController(req: Request, res: Response) {
     try {
         const { idctner } = req.params;
@@ -157,3 +188,4 @@ export async function insertDebtController(req: Request, res: Response) {
 
     }
 }
+*/

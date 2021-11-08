@@ -3,7 +3,7 @@ import { Schema, Document, model } from "mongoose"
 import { ObjectID } from 'mongodb'
 
 export interface RgtDeuda {
-    value: number;
+    value: Number;
     period: String;
 }
 

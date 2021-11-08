@@ -9,7 +9,7 @@ import {
     deletePaymentCtrl, 
     getRentalByCtnerController,
     getMonthNumberController, 
-    insertDebtController
+    createDebtController
 } from "../controllers/rentalController";
 
 class Rental {
@@ -32,7 +32,7 @@ class Rental {
         this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
         
         this.router.get('/fecha/:idctner', getMonthNumberController);
-        this.router.get('/insertdebt/:idctner', insertDebtController);      
+        this.router.get('/insertdebt/:idctner', createDebtController);      
             //  November 04th, 2021!
     }
 

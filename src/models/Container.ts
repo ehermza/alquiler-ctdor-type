@@ -4,7 +4,7 @@ import { uuid } from 'uuidv4';
 export interface IContainer extends Document {
     id_container: string;
     description: string;
-    price_tocharge: Number;
+    price_tocharge: number;
     rented_by: string;
     rented_by_id: string;
     active: boolean
