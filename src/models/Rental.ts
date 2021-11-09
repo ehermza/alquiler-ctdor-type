@@ -33,6 +33,7 @@ export interface RgtPago {
 
     pagos_total: number;
     pagos_register: Array<RgtPago>;
+    last_payment: String;
  }
  /*
  const rentalSchema = new Schema(
@@ -75,7 +76,8 @@ const rentalSchema = new Schema(
             period: String,
             paid_at: Date,
             recibo_n: String
-        }]
+        }],
+        last_payment: String
    }
 )
 

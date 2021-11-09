@@ -4,11 +4,11 @@ import { getPriceContainerService } from './containerService';
 
 import { ObjectID } from "mongodb";
 
-const str: String = "ENE,FEB,MAR,ABR,MAY,JUN,JUL,AGO,SEP,OCT,NOV,DIC";
+const strmonth: String = "ENE,FEB,MAR,ABR,MAY,JUN,JUL,AGO,SEP,OCT,NOV,DIC";
 
 export async function getMonthNumberService(idCtner: string) {
     try {
-        const arrayt = str.split(',');
+        const arrayt = strmonth.split(',');
         const rental: IRental | null = await getRentalByCtnerService(idCtner);
         if (!rental) {
             return -1;
@@ -174,14 +174,34 @@ export async function createAlquilerService(idClient: string, idCtner: string, f
     }
 }
 
+ function queryNextMonth(objRent: IRental): string 
+{
+    var res: string = "";
+    const fromdatabase:string = objRent.last_payment.split(",")[0];
+    const meses: Array<string> = strmonth.split(',');
+    for (var i = 0; i < 12; i++) {
+        if (fromdatabase == meses[i]) {
+            res = meses[i + 1];
+            break;
+        }
+    }
+    return res;
+}
 // export async function insertPaymentService(objRent:IRental, pago:RgtPago)
 export async function insertPaymentService(objRent: IRental, body: any) {
     try {
         const { container, value, recibo_n } = body;
+        const value_paid: number= value;
+        const month = queryNextMonth(objRent);
 
+        /**
+         * QUERY TO DATABASE 'objRent.deuda_register' (period: month)
+         *  AND get 'value' property, 
+         *  if value(mongo) < value_paid then...
+         */
         const pago: RgtPago = {
             value: parseFloat(value),
-            period: 'periodo',
+            period: month,
             paid_at: new Date(),
             recibo_n: recibo_n
         }
@@ -192,30 +212,22 @@ export async function insertPaymentService(objRent: IRental, body: any) {
         var totalAct: number = objRent.pagos_total;
         totalAct += pago.value;
         await objRent.update({
-            pagos_total: totalAct
+            pagos_total: totalAct,
+            last_payment: `${month},0`
         });
         return objRent;
 
     } catch (error) {
-
+        return -1;
     }
 
 }
 
-export async function insertDebtService(objRent: IRental, price: number): Promise<IRental|-1> {
+export async function insertDebtService(objRent: IRental, price: number): Promise<IRental | -1> {
     try {
-        // const keyCont = {
-        //     "id_container": idCtner,
-        //     "active": true
-        // }
-        // const res = await Rental.findOne(keyCont);
-        // if (!res) {
-        //     /** Dont exists rental with keyContainer: idCtner  */
-        //     return -1;
-        // }
         const debt: RgtDeuda = {
             value: price,
-            period: 'PER.DEBT'
+            period: 'OCT,0'
         }
         objRent.deuda_register.push(debt);
         await objRent.save();
