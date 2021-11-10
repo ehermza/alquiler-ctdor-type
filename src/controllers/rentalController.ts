@@ -143,6 +143,9 @@ export async function getMonthNumberController(req: Request, res: Response) {
 }
 
 export async function createDebtController(req: Request, res: Response) {
+    /**
+     * Works OK! November, 09th. 2021
+     */
     try {
         // const { container, value, recibo_n } = req.body;   
         const { idctner } = req.params;

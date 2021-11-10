@@ -174,33 +174,54 @@ export async function createAlquilerService(idClient: string, idCtner: string, f
     }
 }
 
- function queryNextMonth(objRent: IRental): string 
-{
+function queryNextMonth(period: string): string {
     var res: string = "";
-    const fromdatabase:string = objRent.last_payment.split(",")[0];
+    // const fromdatabase: string = objRent.last_payment.period;
+
     const meses: Array<string> = strmonth.split(',');
     for (var i = 0; i < 12; i++) {
-        if (fromdatabase == meses[i]) {
+        if (period == meses[i]) {
             res = meses[i + 1];
             break;
         }
     }
     return res;
 }
+
+function getValueByPeriod(arDeudas: Array<RgtDeuda>, month: string): number {
+    /**
+     *  Averiguar valor que client debe pagar en el mes 'month'
+     *      from Array 'deuda_register' (fromdatabase)
+     */
+    var valueToPay: number = 0;
+    arDeudas.forEach(debt => {
+        if (debt.period == (month)) {
+            valueToPay = debt.value.valueOf();
+        }
+    });
+
+    return valueToPay;
+
+}
 // export async function insertPaymentService(objRent:IRental, pago:RgtPago)
-export async function insertPaymentService(objRent: IRental, body: any) {
+export async function insertPaymentService(objRent: IRental, body: any)
+ {
     try {
         const { container, value, recibo_n } = body;
-        const value_paid: number= value;
-        const month = queryNextMonth(objRent);
+        const value_paid: number = value;
+        const PerOriginal: string = objRent.last_payment.period;
 
-        /**
-         * QUERY TO DATABASE 'objRent.deuda_register' (period: month)
-         *  AND get 'value' property, 
-         *  if value(mongo) < value_paid then...
-         */
+        const PerProximo: string = queryNextMonth(PerOriginal);
+        const arDeudas: RgtDeuda[] = objRent.deuda_register;
+        const valueByPeriod: number = getValueByPeriod(arDeudas, PerProximo);
+
+        const difer: number = + value_paid - valueByPeriod;
+        const month: string = (difer < 0) ? PerOriginal : PerProximo;
+
+        const importe:number = (difer < 0) ? value_paid : difer;
+
         const pago: RgtPago = {
-            value: parseFloat(value),
+            value: (importe),
             period: month,
             paid_at: new Date(),
             recibo_n: recibo_n
@@ -209,11 +230,13 @@ export async function insertPaymentService(objRent: IRental, body: any) {
         objRent.pagos_register.push(pago);
         await objRent.save();
 
-        var totalAct: number = objRent.pagos_total;
-        totalAct += pago.value;
         await objRent.update({
-            pagos_total: totalAct,
-            last_payment: `${month},0`
+            pagos_total: objRent.pagos_total + pago.value,
+            // last_payment: `${month},0`
+            last_payment: {
+                period: month,
+                a_cta: -1
+            }
         });
         return objRent;
 
@@ -227,20 +250,21 @@ export async function insertDebtService(objRent: IRental, price: number): Promis
     try {
         const debt: RgtDeuda = {
             value: price,
-            period: 'OCT,0'
+            period: 'ENE'
         }
         objRent.deuda_register.push(debt);
         await objRent.save();
 
         const total: number = objRent.deuda_total + price;
-        await objRent.update({
+        await objRent.updateOne({
             deuda_total: total
         });
+        console.log(objRent);
 
         return objRent;
 
     } catch (error) {
-        return -1;
+        throw Error(error);
 
     }
 }

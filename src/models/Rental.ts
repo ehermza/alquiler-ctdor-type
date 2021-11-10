@@ -14,6 +14,10 @@ export interface RgtPago {
     paid_at: Date;
     recibo_n: String;
 }
+export interface LastPayment {
+    a_cta: number;
+    period: string;
+}
 
 /**
  * Class created by EHER Date: Sept.06th, 2021
@@ -33,27 +37,9 @@ export interface RgtPago {
 
     pagos_total: number;
     pagos_register: Array<RgtPago>;
-    last_payment: String;
+    last_payment: LastPayment; 
  }
- /*
- const rentalSchema = new Schema(
-    {
-        id_client: {type:String, required:true},
-        id_container: {type:String, required:true},
-
-        active: {type:Boolean},
-        date_init: {type:Date, required:true},
-        date_final: {type:Date, required:false},
-
-        deuda_total: Number,
-        deuda_register: [],
-
-        pagos_total: Number,
-        pagos_register: []
-   }
-)
-*/
-
+ 
 const rentalSchema = new Schema(
     {
         id_client: {type:String, required:true},
@@ -77,7 +63,10 @@ const rentalSchema = new Schema(
             paid_at: Date,
             recibo_n: String
         }],
-        last_payment: String
+        last_payment: {
+            period: String,
+            a_cta: Number
+        }
    }
 )
 
