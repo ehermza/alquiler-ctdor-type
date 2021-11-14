@@ -38,6 +38,7 @@ export interface LastPayment {
     pagos_total: number;
     pagos_register: Array<RgtPago>;
     last_payment: LastPayment; 
+    last_deuda_per: string;
  }
  
 const rentalSchema = new Schema(
@@ -66,7 +67,8 @@ const rentalSchema = new Schema(
         last_payment: {
             period: String,
             a_cta: Number
-        }
+        },
+        last_deuda_per: String
    }
 )
 

@@ -174,8 +174,9 @@ export async function createAlquilerService(idClient: string, idCtner: string, f
     }
 }
 
-function queryNextMonth(period: string): string {
-    var res: string = "";
+function queryNextMonth(period: string): string 
+{
+    var res: string = "ENE";
     // const fromdatabase: string = objRent.last_payment.period;
 
     const meses: Array<string> = strmonth.split(',');
@@ -221,31 +222,35 @@ async function insertPagoRegister(objRent: IRental, importe:number, mes:string, 
 export async function insertPaymentService(objRent: IRental, body: any) {
     /**
      * Client Payment: Try to register period correct to set payment.
-     *     Date: Nov.09th 2021
+     *     Date: Nov.09th 2021  Author: EHER/2021
      */
     try {
         const { container, value, recibo_n } = body;
-        const value_paid: number = value;
-        const PerOriginal: string = objRent.last_payment.period;
 
-        const PerProximo: string = queryNextMonth(PerOriginal);
+        const cta_anter: number = objRent.last_payment.a_cta;
+        const value_paid: number = value + cta_anter;
+
+        const PerOriginal: string = objRent.last_payment.period;
         const arDeudas: RgtDeuda[] = objRent.deuda_register;
         const valueByPeriod: number = getValueByPeriod(arDeudas, PerOriginal);
-
+        
+        const PerProximo: string = queryNextMonth(PerOriginal);
         const difer: number = + value_paid - valueByPeriod;
         const month: string = (difer < 0) ? PerOriginal : PerProximo;
 
         const vuelto: number = (difer < 0) ? value_paid : difer;
 
         if (difer >= 0) {
-            /** Si client canceló debt of PerOriginal, then
-             *      registrar on database*/
-            insertPagoRegister(objRent, value_paid, PerOriginal, recibo_n);
+        /** If client canceled current period debt, then..
+         *    put payment on db: 'pagos_register' property
+         **/
+            insertPagoRegister(objRent, valueByPeriod, PerOriginal, recibo_n);
+            await objRent.update({
+                pagos_total: objRent.pagos_total + valueByPeriod,
+            });
         }
-
         await objRent.update({
-            pagos_total: objRent.pagos_total + value_paid,
-            // last_payment: `${month},0`
+            // pagos_total: objRent.pagos_total + value_paid,
             last_payment: {
                 period: month, a_cta: vuelto
             }
@@ -260,18 +265,19 @@ export async function insertPaymentService(objRent: IRental, body: any) {
 
 export async function insertDebtService(objRent: IRental, price: number): Promise<IRental | -1> {
     try {
+        const PerProximo = queryNextMonth(objRent.last_deuda_per);
         const debt: RgtDeuda = {
             value: price,
-            period: 'ENE'
+            period: PerProximo       // urgent to change!
         }
         objRent.deuda_register.push(debt);
         await objRent.save();
 
-        const total: number = objRent.deuda_total + price;
+        // const total: number = objRent.deuda_total + price;
         await objRent.updateOne({
-            deuda_total: total
+            deuda_total: objRent.deuda_total + price,
+            last_deuda_per: PerProximo
         });
-        console.log(objRent);
 
         return objRent;
 
