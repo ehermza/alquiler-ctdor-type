@@ -17,8 +17,16 @@ export async function getMonthNumberService(idCtner: string) {
         return arrayt[fecha.getMonth()];
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
 
+    }
+}
+
+export async function getRentalByIdService(id: string) {
+    try {
+        return await Rental.findById(new ObjectID(id))
+    } catch (error) {
+        throw new Error();
     }
 }
 
@@ -34,7 +42,7 @@ export async function getRentalByCtnerService(idCtner: string) {
         return await Rental.findOne(filter);
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
     }
 }
 
@@ -52,7 +60,7 @@ export async function getSaldoByCtnerService(idCtner: string): Promise<number> {
         return (alquiler.deuda_total - alquiler.pagos_total);
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
 
     }
 }
@@ -114,7 +122,7 @@ export async function getPaymentByCtnerServ(idCtner: string) {
         return await alquiler.pagos_register;
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
 
     }
 }
@@ -132,7 +140,7 @@ export async function getPagosByClientService(idClient: string, nCtner: Number) 
         return register;
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
     }
 }
 // insertPayment(importe: number, fecha: Date, per: String, recibo?:String): number
@@ -146,16 +154,17 @@ export async function getRentalObjectServ(idClient: string, idCtner: string) {
         return await Rental.findOne(filter).exec();
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
     }
 }
-export async function createAlquilerService(idClient: string, idCtner: string, fecha: number) {
+export async function createAlquilerService(idClient: string, idCtner: string, idDebt: string, fecha: number) {
     try {
         // const alquiler:IRental       
         const alquiler: IRental = new Rental(
             {
                 id_client: idClient,
                 id_container: idCtner,
+                id_debtinfo: idDebt,
                 active: true,
                 date_init: fecha,
                 deuda_total: 0,
@@ -164,12 +173,13 @@ export async function createAlquilerService(idClient: string, idCtner: string, f
                 pagos_register: []
             }
         );
-        const rental: IRental = alquiler;
-        console.log(rental);
-        return await rental.save();
+        // const rental: IRental = alquiler;
+        console.log("============(createAlquilerService)==========")
+        console.log(alquiler);
+        return await alquiler.save();
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
 
     }
 }
@@ -263,7 +273,8 @@ export async function insertPaymentService(objRent: IRental, body: any) {
 
 }
 
-export async function insertDebtService(objRent: IRental, price: number): Promise<IRental | -1> {
+export async function insertDebtService(objRent: IRental, price: number): Promise<IRental> 
+{
     try {
         const PerProximo = queryNextMonth(objRent.last_deuda_per);
         const debt: RgtDeuda = {
@@ -282,7 +293,7 @@ export async function insertDebtService(objRent: IRental, price: number): Promis
         return objRent;
 
     } catch (error) {
-        throw Error(error);
+        throw new Error();
 
     }
 }

@@ -17,6 +17,8 @@ import { getContainerOneServ } from "../services/containerService";
 import { RgtPago, IRental } from "../models/Rental";
 import { Number } from "mongoose";
 import { IContainer } from "../models/Container";
+import { createDebtService, updateDebtService } from "../services/debtService";
+import { IDebt } from "../models/Debt";
 
 export async function getPaymentByCtnerCtrl(req: Request, res: Response) {
     /**
@@ -123,7 +125,18 @@ export async function createAlquilerCtrl(req: Request, res: Response) {
         // const {idclient, idctner, fecha} = req.body;
         const { ptr_client, ptr_ctner } = req.body;
         // const fecha = Date.now();
-        const alquiler = await createAlquilerService(ptr_client, ptr_ctner, Date.now());
+        const debtinfo: IDebt | undefined =
+            await createDebtService('N.CONTAINER', 'CLIENT');
+        if (!debtinfo) {
+            res.status(711);
+            return;
+        }
+        const ptr_debt: string = debtinfo._id;
+
+        /**
+         * Urgent: DEBUG HERE! Nov-23th.2021
+         */
+        const alquiler = await createAlquilerService(ptr_client, ptr_ctner, ptr_debt, Date.now());
         res.json(alquiler);
 
     } catch (error) {
@@ -151,7 +164,7 @@ export async function createDebtController(req: Request, res: Response) {
         const { idctner } = req.params;
         const objCtner: IContainer | null =
             await getContainerOneServ(new ObjectID(idctner));
-            
+
         if (!objCtner) {
             res.status(714).json({ message: 'Container object not defined!' });
             return;
@@ -165,6 +178,12 @@ export async function createDebtController(req: Request, res: Response) {
             return;
         }
         const alquiler = await insertDebtService(objRent, price);
+
+        /**
+         * INSERTAR DEBT INFO Nov 23th.2021
+         */
+        await updateDebtService(alquiler);
+
         res.json(alquiler);
 
     } catch (error) {

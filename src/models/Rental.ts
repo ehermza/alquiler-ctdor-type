@@ -3,7 +3,7 @@ import { Schema, Document, model } from "mongoose"
 import { ObjectID } from 'mongodb'
 
 export interface RgtDeuda {
-    value: Number;
+    value: number;
     period: String;
 }
 
@@ -27,6 +27,7 @@ export interface LastPayment {
  export interface IRental extends Document {
     id_client: String;
     id_container: String;
+    id_debtinfo: String;
 
     active: Boolean;
     date_init: Date;
@@ -45,6 +46,7 @@ const rentalSchema = new Schema(
     {
         id_client: {type:String, required:true},
         id_container: {type:String, required:true},
+        id_debtinfo: String,
 
         active: Boolean,
         date_init: {
@@ -55,8 +57,10 @@ const rentalSchema = new Schema(
         date_final: Date,
 
         deuda_total: Number,
-        deuda_register: [{value: Number,period: String}],
-
+        deuda_register: [{
+            value: Number,
+            period: String
+        }],
         pagos_total: Number,
         pagos_register: [{
             value: Number,
