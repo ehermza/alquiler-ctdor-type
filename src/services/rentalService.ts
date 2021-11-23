@@ -170,7 +170,10 @@ export async function createAlquilerService(idClient: string, idCtner: string, i
                 deuda_total: 0,
                 deuda_register: [],
                 pagos_total: 0,
-                pagos_register: []
+                pagos_register: [], 
+                last_payment: {
+                    a_cta: 0, period: "ENE"
+                }
             }
         );
         // const rental: IRental = alquiler;
@@ -235,6 +238,9 @@ export async function insertPaymentService(objRent: IRental, body: any) {
      *     Date: Nov.09th 2021  Author: EHER/2021
      */
     try {
+        console.log("===========(ALQUILER)===========");
+        console.log(objRent);        
+
         const { container, value, recibo_n } = body;
 
         const cta_anter: number = objRent.last_payment.a_cta;

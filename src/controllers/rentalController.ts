@@ -124,18 +124,17 @@ export async function createAlquilerCtrl(req: Request, res: Response) {
     try {
         // const {idclient, idctner, fecha} = req.body;
         const { ptr_client, ptr_ctner } = req.body;
+        console.log("=========(REQ.BODY)=========");
+        console.log(req.body);
+
         // const fecha = Date.now();
         const debtinfo: IDebt | undefined =
             await createDebtService('N.CONTAINER', 'CLIENT');
         if (!debtinfo) {
             res.status(711);
             return;
-        }
+        }        
         const ptr_debt: string = debtinfo._id;
-
-        /**
-         * Urgent: DEBUG HERE! Nov-23th.2021
-         */
         const alquiler = await createAlquilerService(ptr_client, ptr_ctner, ptr_debt, Date.now());
         res.json(alquiler);
 
@@ -155,16 +154,15 @@ export async function getMonthNumberController(req: Request, res: Response) {
     }
 }
 
-export async function createDebtController(req: Request, res: Response) {
+export async function insertDebtController(req: Request, res: Response) {
     /**
-     * Works OK! November, 09th. 2021
+     * Works OK! November,23th. 2021
      */
     try {
         // const { container, value, recibo_n } = req.body;   
         const { idctner } = req.params;
         const objCtner: IContainer | null =
             await getContainerOneServ(new ObjectID(idctner));
-
         if (!objCtner) {
             res.status(714).json({ message: 'Container object not defined!' });
             return;
@@ -172,15 +170,22 @@ export async function createDebtController(req: Request, res: Response) {
         const idclient: string = objCtner.rented_by_id;
         const price: number = objCtner.price_tocharge;
 
-        const objRent: any = await getRentalObjectServ(idclient, idctner);
-        if (!objRent) {
-            res.status(710).json({ message: 'Rental object is null or undefined.' })
+        var alquiler:IRental| null = await getRentalObjectServ(idclient, idctner);
+        if (!alquiler) {
+            res.status(710).json({ message: 'Rental object is null or undefined.' });
             return;
         }
-        const alquiler = await insertDebtService(objRent, price);
+        await insertDebtService(alquiler, price);
 
+        alquiler = await getRentalObjectServ(idclient, idctner);
+        if(!alquiler) {
+            res.status(710).json({ message: 'Rental object is null or undefined.' });
+            return;
+        }
+        console.log("===============(ALQUILER)=================");
+        console.log(alquiler);
         /**
-         * INSERTAR DEBT INFO Nov 23th.2021
+         * Update Object Debt to print Debts table.
          */
         await updateDebtService(alquiler);
 

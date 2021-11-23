@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IDebt extends Document {
     number_ctner: string;
-    id_rental: string;
+    // id_rental: string;
     name_client: string;
     current_debt: number;
     price_rental: number;
@@ -13,9 +13,11 @@ export interface IDebt extends Document {
 
 const DebtSchema = new Schema(
     {
-        number_ctner: { type: String, required: true },
-        id_rental: { type: String, required: true },
-        name_client: { type: String, required: true },
+        number_ctner: String,
+        name_client : String,
+    // number_ctner: { type: String, required: true },
+    // id_rental: { type: String, required: true },
+        // name_client: { type: String, required: true },
         current_debt: { type: Number, required: true },
         price_rental: { type: Number, required: true },
         overdue_debt: { type: Number, default: 0 },
