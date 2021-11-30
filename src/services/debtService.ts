@@ -7,17 +7,15 @@ import Rental, { IRental, RgtPago, RgtDeuda } from '../models/Rental';
 
 let objRental: IRental | undefined = undefined;
 
-export async function createDebtService(nCtner: string, client:string)
+export async function createDebtService(nCtner: number, client:string)
  {
      /**
       * This function execute just when create a new rental.
       * Date: Nov-20th.2021
       */
     try {
-
         const debtinfo:IDebt = new Debt({
             number_ctner: nCtner,
-            // id_rental: string;
             name_client: client,
             current_debt: 0,
             price_rental: 0,
@@ -33,7 +31,6 @@ export async function createDebtService(nCtner: string, client:string)
         throw new Error();
     }
 }
-
 
 function getValueDebt(): number {
     var importe: number = -1;
@@ -81,27 +78,3 @@ export async function updateDebtService(alquiler:IRental)
         throw new Error();
     }
 }
-/**
- * 
- * @param alquiler 
- export async function updateDebtService(alquiler: IRental) 
- {
-     try {
-         objRental = alquiler;
- 
-         const debito:IDebt = 
-         
-         const currentDebt: number =
-             +objRental.deuda_total - objRental.pagos_total - objRental.last_payment.a_cta;
- 
-         const priceByMonth: number = getValueDebt();
-         const difer:number = (currentDebt - priceByMonth);
-         const atras:number = (difer > 0) ? difer: 0;
- 
-         const debito: IDebt = new Debt({
-             current_debt: currentDebt,
-             price_rental: priceByMonth,
-             overdue_debt: atras,   
-             paid_current_per: '0'
-         });
- */

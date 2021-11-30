@@ -18,7 +18,7 @@ const PagoSchema = new Schema(
         month_paid: String,
         paid_at: { type: Date, default: Date.now() },
         recibo_n: String,
-	client_name: String
+	    client_name: String
     }
 );
 

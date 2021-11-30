@@ -30,7 +30,8 @@ class Rental {
         this.router.delete('/pagos/:recibo&:idctner', deletePaymentCtrl);
         
         this.router.get('/fecha/:idctner', getMonthNumberController);
-        this.router.get('/insertdebt/:idctner', insertDebtController);      
+        // this.router.get('/insertdebt/:idctner', insertDebtController);      
+        this.router.get('/insertdebt/', insertDebtController);      
             //  November 04th, 2021!
     }
 

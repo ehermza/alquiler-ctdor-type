@@ -2,8 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 // import { uuid } from 'uuidv4';
 
 export interface IDebt extends Document {
-    number_ctner: string;
-    // id_rental: string;
+    number_ctner: number;
     name_client: string;
     current_debt: number;
     price_rental: number;
@@ -13,16 +12,13 @@ export interface IDebt extends Document {
 
 const DebtSchema = new Schema(
     {
-        number_ctner: String,
-        name_client : String,
-    // number_ctner: { type: String, required: true },
-    // id_rental: { type: String, required: true },
-        // name_client: { type: String, required: true },
+        number_ctner: { type: Number, required: true },
+        name_client: String,
         current_debt: { type: Number, required: true },
         price_rental: { type: Number, required: true },
         overdue_debt: { type: Number, default: 0 },
-        paid_current_per: { type: String, default: '0' }
+        paid_current_per: { type: String, default: 'not per.' }
     }
 );
 
-export default model('debt', DebtSchema);
+export default model<IDebt>('debt', DebtSchema);

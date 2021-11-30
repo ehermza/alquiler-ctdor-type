@@ -1,7 +1,7 @@
 import Container, { IContainer } from "../models/Container"
 import { ObjectID } from 'mongodb'
 
-export async function getContainersServ() {
+export async function getContainersServ(): Promise<IContainer[]> {
     try {
         // return await Container.find({ rented_by: { $ne: '' }}).sort({id_container:-1});
         // return await Container.find();

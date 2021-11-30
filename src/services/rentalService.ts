@@ -177,7 +177,7 @@ export async function createAlquilerService(idClient: string, idCtner: string, i
             }
         );
         // const rental: IRental = alquiler;
-        console.log("============(createAlquilerService)==========")
+        console.log("========(createAlquilerService)========")
         console.log(alquiler);
         return await alquiler.save();
 

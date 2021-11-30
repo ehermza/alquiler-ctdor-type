@@ -13,7 +13,7 @@ import {
     insertDebtService
 } from "../services/rentalService";
 
-import { getContainerOneServ } from "../services/containerService";
+import { getContainersServ, getContainerOneServ } from "../services/containerService";
 import { RgtPago, IRental } from "../models/Rental";
 import { Number } from "mongoose";
 import { IContainer } from "../models/Container";
@@ -123,17 +123,17 @@ export async function createPaymentCtrl(req: Request, res: Response) {
 export async function createAlquilerCtrl(req: Request, res: Response) {
     try {
         // const {idclient, idctner, fecha} = req.body;
-        const { ptr_client, ptr_ctner } = req.body;
+        const { ptr_client, ptr_ctner, client_name, ctner_number } = req.body;
         console.log("=========(REQ.BODY)=========");
         console.log(req.body);
 
         // const fecha = Date.now();
         const debtinfo: IDebt | undefined =
-            await createDebtService('N.CONTAINER', 'CLIENT');
+            await createDebtService(ctner_number, client_name);
         if (!debtinfo) {
             res.status(711);
             return;
-        }        
+        }
         const ptr_debt: string = debtinfo._id;
         const alquiler = await createAlquilerService(ptr_client, ptr_ctner, ptr_debt, Date.now());
         res.json(alquiler);
@@ -155,32 +155,65 @@ export async function getMonthNumberController(req: Request, res: Response) {
 }
 
 export async function insertDebtController(req: Request, res: Response) {
+    try {
+        // var aCtnersActive: IContainer[] = [];
+        
+        const ctners: IContainer[] = await getContainersServ();
+        console.log("========(CONTAINERS TODOS)========");
+        console.log(ctners);
+        
+        /** Filter Containers 'Activos' and then, insert debt. */
+        var aCtners: IContainer[] =
+        ctners.filter((container) => container.active);
+        
+        var errno: number = 0;
+        var totaltoCharge: number = 0;
+
+        aCtners.forEach(async function (container) {
+            totaltoCharge += container.price_tocharge;
+            errno= await insertDebtByCtner(container);
+            if(errno) {
+                res.status(errno).json({ status: errno})
+                return;
+            }
+        });
+          res.json( { totaltoCharge } );
+
+    } catch (error) {
+        res.status(770).json({
+            status: 770,
+            message: 'Error to Try Insert Deuda de todos los Alquileres Activos.-'
+        })
+    }
+}
+
+// export async function insertDebtController(req: Request, res: Response) 
+async function insertDebtByCtner(ctnerObj: IContainer): Promise<number> {
     /**
      * Works OK! November,23th. 2021
      */
     try {
-        // const { container, value, recibo_n } = req.body;   
-        const { idctner } = req.params;
-        const objCtner: IContainer | null =
-            await getContainerOneServ(new ObjectID(idctner));
-        if (!objCtner) {
-            res.status(714).json({ message: 'Container object not defined!' });
-            return;
-        }
-        const idclient: string = objCtner.rented_by_id;
-        const price: number = objCtner.price_tocharge;
+        // const objCtner: IContainer | null =
+        //     await getContainerOneServ((idctnerObj));
+        // if (!objCtner) {
+        //     // res.status(714).json({ message: 'Container object not defined!' });
+        //     return 714;
+        // }
+        const idctner: string = ctnerObj._id.toString();
+        const idclient: string = ctnerObj.rented_by_id;
+        const price: number = ctnerObj.price_tocharge;
 
-        var alquiler:IRental| null = await getRentalObjectServ(idclient, idctner);
+        var alquiler: IRental | null = await getRentalObjectServ(idclient, idctner);
         if (!alquiler) {
-            res.status(710).json({ message: 'Rental object is null or undefined.' });
-            return;
+            // res.status(710).json({ message: 'Rental object is null or undefined.' });
+            return 710;
         }
         await insertDebtService(alquiler, price);
 
         alquiler = await getRentalObjectServ(idclient, idctner);
-        if(!alquiler) {
-            res.status(710).json({ message: 'Rental object is null or undefined.' });
-            return;
+        if (!alquiler) {
+            // res.status(710).json({ message: 'Rental object is null or undefined.' });
+            return 711;
         }
         console.log("===============(ALQUILER)=================");
         console.log(alquiler);
@@ -189,10 +222,11 @@ export async function insertDebtController(req: Request, res: Response) {
          */
         await updateDebtService(alquiler);
 
-        res.json(alquiler);
+        return 0;
 
     } catch (error) {
-        res.status(707).json({ message: 'Error to try GET Rent object.' })
+        return 707;
+        // res.status(707).json({ message: 'Error to try GET Rent object.' })
     }
 
 }
