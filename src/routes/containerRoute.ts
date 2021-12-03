@@ -27,7 +27,7 @@ class Container
         this.router.post('/', createContainerCtrl);
         this.router.put('/:id', updateContainerCtrl);
         this.router.delete('/:id', deleteContainerCtrl);
-        this.router.post('/create/:number', insertContainersController);
+            // this.router.post('/create/:number', insertContainersController); deprecated!
     }
 }
 const container = new Container();

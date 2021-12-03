@@ -69,10 +69,24 @@ export async function updateDebtService(alquiler:IRental)
             paid_current_per: '0'
         }
         const id: ObjectID = new ObjectID( objRental.id_debtinfo.toString());
-        console.log("===============(DebtInfo)===============");
+        console.log("===========(DEBT-INFO)===========");
         console.log(debt);
 
         return  await Debt.findByIdAndUpdate(id, debt);
+
+    } catch (error) {
+        throw new Error();
+    }
+}
+
+export async function getDebtInfoService() :Promise <IDebt[]>
+{
+    try {
+        const aDebtInfo: IDebt[] = await Debt.find();
+        console.log("===========(DEBT-TABLE-FIND)===========");
+        console.log(aDebtInfo);
+
+        return await aDebtInfo;
 
     } catch (error) {
         throw new Error();
