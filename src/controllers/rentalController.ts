@@ -13,7 +13,12 @@ import {
     insertDebtService
 } from "../services/rentalService";
 
-import { getContainersServ, getContainerOneServ } from "../services/containerService";
+import { 
+    getContainersServ,
+     getContainerOneServ 
+} from "../services/containerService";
+
+import {updateDebtByPaymentService} from "../services/debtService";
 import { RgtPago, IRental } from "../models/Rental";
 import { Number } from "mongoose";
 import { IContainer } from "../models/Container";
@@ -94,24 +99,28 @@ export async function getPagosCtrl(req: Request, res: Response) {
 
 export async function createPaymentCtrl(req: Request, res: Response) {
     try {
-        // const { container, value, recibo_n } = req.body;   
-        const { container } = req.body;
+        const { container, value } = req.body;
         /** const container is 'id_container' property 
          *      from Container class */
-        console.log(' createPaymentCtrl (req.body) ', req.body);
-        const objCtner = await getContainerOneServ(new ObjectID(container));
+        console.log(' (body) ', req.body);
+        const objCtner:IContainer|null =
+             await getContainerOneServ(new ObjectID(container));
         if (!objCtner) {
             res.status(714).json({ message: 'Container object not defined!' });
             return;
         }
         const idclient: string = objCtner.rented_by_id;
+        const alquiler: IRental|null =
+             await insertPaymentService(idclient, req.body);
 
-        const objRent: any = await getRentalObjectServ(idclient, container);
-        if (!objRent) {
-            res.status(710).json({ message: 'Rental object is null or undefined.' })
+        if (!alquiler) {
+            res.status(710).json({ message: 'Can\'t create Payment: Rental Object is null or undefined.' })
             return;
         }
-        const alquiler = await insertPaymentService(objRent, req.body);
+        const id_debt: string =
+             alquiler.id_debtinfo.toString();
+        await updateDebtByPaymentService(id_debt, parseFloat(value));
+
         res.json(alquiler);
 
     } catch (error) {

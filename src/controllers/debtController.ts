@@ -19,3 +19,12 @@ export async function getListDebts(req:Request, res:Response)
     }
 }
 
+export async function setDebtByPaymentController(req:Request, res:Response) 
+{
+    try {
+        
+        
+    } catch (error) {
+        
+    }
+}
